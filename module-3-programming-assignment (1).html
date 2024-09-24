@@ -1,0 +1,259 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>CMPS 260: Module 3 Programming Assignment</title>
+<style>* { font-family: monospace; }</style>
+<script>
+
+// NOTE: You must implement the data structures using the no prototype approach.
+//       This is what the book uses, so you can copy it.
+//       See also: https://it.pointpark.edu/tutorials/no-prototype-vs-prototype/
+
+// NOTE: Please review the following links regularly:
+//       https://it.pointpark.edu/tutorials/arrays-vs-objects/
+//       https://it.pointpark.edu/tutorials/no-prototype-vs-prototype/
+//       https://it.pointpark.edu/tutorials/implementation-vs-interface/
+
+
+
+//--------------------------------//
+// The linked list data structure //
+//--------------------------------//
+console.log("The linked list data structure");
+
+// 1. Suppose you have an array with 1,000 elements and a linked list with 1,000
+//    elements. For both data structures, you want to retrieve the last entry.
+//    Does one data structure complete that operation before the other (i.e.,
+//    is it faster)? If yes, how much faster? If no, why does it take the same
+//    amount of time?
+
+
+
+//------------------------//
+// Creating a linked list //
+//------------------------//
+console.log("Creating a linked list");
+
+// We are going to implement the linked list data structure described in the
+// book. Instead of using 'let' we use 'var' everywhere. Note that this
+// implementation does not use the prototype (see homework). Here is a skeleton
+// that we will work on completing:
+
+function LinkedList() {
+
+  // helper class
+  function Node(element) {
+    this.element = element;
+    this.next = null;
+  }
+
+  // store length and head
+  var length = 0;
+  var head = null;
+
+  this.append = function(element) {
+    // add a new item to the end of the list
+    // if linked list is empty
+    if (head == null)
+      head = new Node(element);
+    // Else
+    else
+    {
+      var last = head;
+      while (last.next != null)
+        last = last.next;
+
+      last.next = new Node(element);
+    }
+    length++;
+  };
+
+  this.insert = function(position, element) {
+    // insert a new item at a specific location
+    // ...
+    //if position is 0, we need to insert at the start
+    if (position == 0)
+    {
+      var node = new Node(element);
+      node.next = head;
+      head = node;
+    }
+    //if position is equal to the length, it means we want to insert at the end of the list
+    else if (position == length)
+      this.append(element);
+    else
+    {
+      var curr = head;
+      for(var i = 0; i < position - 1 && curr != null; i++)
+        curr = curr.next;
+      var node = new Node(element);
+      node.next = curr.next;
+      curr.next = node;
+    }
+    length++;
+  };
+
+  this.removeAt = function(position) {
+    // remove an element from a specific location
+    // if list is empty
+    if (head == null)
+      return;
+    // else if head is to be deleted
+    else if (position == 0)
+    {
+      head = head.next;
+    }
+    // else,
+    else
+    {
+      var curr = head;
+      var prev = null;
+      for(var i = 0; i < position - 1 && curr != null; i++)
+      {
+        prev = curr;
+        curr = curr.next;
+      }
+      if (curr != null)
+        prev.next = curr.next;
+    }
+    length--;
+  };
+
+  this.remove = function(element) {
+    // remove a specific element from the list
+    // if list is empty
+    if (head == null)
+      return;
+    // else if head is to be deleted
+    else if (head.element == element)
+    {
+      head = head.next;
+    }
+    // else,
+    else
+    {
+      var curr = head;
+      var prev = null;
+      while (curr.element != element)
+      {
+        prev = curr;
+        curr = curr.next;
+      }
+      if (curr != null)
+        prev.next = curr.next;
+      else
+        return;
+    }
+    length--;
+  };
+
+  this.indexOf = function(element) {
+    // return the index of an element in the list
+    var curr = head;
+    var index = 0;
+    while(curr != null)
+    {
+      if (curr.element == element)
+        return index;
+      curr = curr.next;
+      index++;
+    }
+    return -1;
+  };
+
+  this.isEmpty = function() {
+    // check whether the list is empty
+    if (head == null)
+      return true;
+    return false; 
+  };
+
+  this.size = function() {
+    // return the number of elements in the list
+    return length;
+  };
+
+  this.getHead = function() {
+    // return head node
+    return head;
+  }
+
+  this.toString = function() {
+    // overwrite the default toString method
+    var current = head;
+    var string = "List: ";
+    while (current) {
+      string += current.element + (current.next ? " -> " : "");
+      current = current.next;
+    }
+    return string;
+  };
+
+  this.print = function() {
+    // print to the console
+    console.log(this.toString());
+  };
+
+}
+
+// create a linked list to operate on
+var list = new LinkedList();
+
+// 1. Write pseudo code (meaning; use comments) to describe how you would
+//    implement the append method. HINT: What two scenarios can you distinguish?
+// In the first method, we will insert the element at the end of the list. If
+// list is empty will add the new node to the head, otherwise we will loop through the list and append
+// it at the end.
+//
+// 2. Translate your pseudo code into actual code and test it.
+//    HINT: Use list.print() to test your code.
+list.append(5);
+list.append(6);
+list.append(7);
+list.append(8);
+list.append(9);
+list.print();
+// 3. Repeat (1) and (2) for insert.
+// In the insert method, we will insert the element at the specified position of the list. If
+// list is empty will add the new node to the head, else if position is equal to length, we will append it at the last
+// otherwise we will loop through the list and append it at the specified position
+list.insert(0,2);
+list.insert(2,4);
+list.insert(4,10);
+list.print();
+// 4. Repeat (1) and (2) for removeAt.
+// In the removeAt method, we will check if head is not null. In that case, we will check if position is 0, then we will just update the head to its next.
+// Else, if position is something else, we will loop through that position and then remove that element.
+list.removeAt(0);
+list.removeAt(2);
+list.print();
+
+// 5. Repeat (1) and (2) for remove.
+// In the remove method, we will check if head is not null. In that case, we will check if head is to be removed, then we will just update the head to its next.
+// Else, if element is somewhere else, we will loop through the list and then remove that element.
+list.remove(5);
+list.remove(10);
+list.print();
+
+// 6. Repeat (1) and (2) for indexOf.
+// In the indexOf method, we will loop through the elements and return the index of the element
+console.log('Index of 6: ' + list.indexOf(6));
+console.log('Index of 9: ' + list.indexOf(9));
+
+// 7. Repeat (1) and (2) for isEmpty.
+// In the isEmpty method, we will check the head and if its null, we will return true else false
+console.log('Is list empty? ' + list.isEmpty());
+
+// 8. Repeat (1) and (2) for size.
+// In the size method, we will return the length of the list
+console.log('Size of list: ' + list.size());
+// 9. Repeat (1) and (2) for getHead.
+console.log('Head: ' + list.getHead());
+
+</script>
+</head>
+<body>
+  See console!
+</body>
+</html>

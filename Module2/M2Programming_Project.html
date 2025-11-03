@@ -23,6 +23,48 @@
 console.log("Project");
 
 // 1. Implement the stack data structure using the prototype.
+function Stack() {
+this.items = [];
+}
+Stack.prototype.push = function(element) {
+this.items.push(element);
+};
+Stack.prototype.pop = function() {
+return this.items.pop();
+};
+Stack.prototype.peek = function() {
+return this.items[this.items.length - 1];
+};
+Stack.prototype.isEmpty = function() {
+return this.items.length === 0;
+};
+Stack.prototype.clear = function() {
+this.items = [];
+};
+Stack.prototype.size = function() {
+return this.items.length;
+};
+
+const stack = new Stack();
+console.log(stack.isEmpty()); 
+
+stack.push(5);
+stack.push(8);
+console.log(stack.peek());
+
+stack.push(11);
+console.log(stack.size()); 
+console.log(stack.isEmpty()); 
+
+stack.push(15);
+console.log(stack.peek()); 
+
+console.log(stack.pop()); 
+console.log(stack.peek()); 
+
+stack.clear();
+console.log(stack.isEmpty()); 
+
 
 // 2. It is possible to use a stack to check if the number of parentheses in a
 //    string is balanced, meaning there are as many opening parentheses as
@@ -33,10 +75,38 @@ console.log("Project");
 
 function isBalanced(str) {
   // check the parentheses in str
+  for (let i = 0; i < str.length; i++) {
+    const char = str[i];
+    if (char === '(') {
+        stack.push(char); 
+    } else if (char === ')') {
+        if (stack.isEmpty()) {
+            
+            return false;
+        }
+        stack.pop();
+    }
 }
-
+return stack.isEmpty();
+}
 // 3. Write a simple test program that shows your implementation in the
 //    previous question works.
+console.log("Test program");
+
+const testStrings = [
+"(())",        
+"((())())",    
+"(()",         
+"())(",        
+"",            
+"()",          
+"(()(()))",    
+"(()()))",     
+];
+testStrings.forEach((str) => {
+console.log(`"${str}" => ${isBalanced(str) ? "Balanced" : "Unbalanced"}`);
+});
+
 
 // 4. Implement the queue data structure using the prototype.
 
@@ -52,16 +122,93 @@ function Edible(name, isFruit) {
   };
 }
 
-// ... put your code here ...
+class Queue {
+constructor() {
+this.count = 0;
+this.lowestCount = 0;
+this.items = {};
+}
+
+enqueue(element) {
+this.items[this.count] = element;
+this.count++;
+}
+
+dequeue() {
+if (this.isEmpty()) {
+return undefined;
+}
+const result = this.items[this.lowestCount];
+delete this.items[this.lowestCount];
+this.lowestCount++;
+return result;
+}
+
+peek() {
+if (this.isEmpty()) {
+return undefined;
+}
+return this.items[this.lowestCount];
+}
+
+isEmpty() {
+return this.count - this.lowestCount === 0;
+}
+
+size() {
+return this.count - this.lowestCount;
+}
+}
+
+function Edible(name, isFruit) {
+this.name = name;
+this.isFruit = isFruit;
+this.toString = function() {
+return "Edible: " + this.name + " Fruit: " + this.isFruit;
+};
+}
+
+const edibleQueue = new Queue();
+
+edibleQueue.enqueue(new Edible("Apple", true));
+edibleQueue.enqueue(new Edible("Banana", true));
+edibleQueue.enqueue(new Edible("Orange", true));
+
+edibleQueue.enqueue(new Edible("Carrot", false));
+edibleQueue.enqueue(new Edible("Broccoli", false));
+edibleQueue.enqueue(new Edible("Spinach", false));
+
+while (!edibleQueue.isEmpty()) {
+console.log(edibleQueue.dequeue().toString());
+}
+
 
 // 6. Create two more queues: one for fruits and one for vegetables. For this
 //    question, only create them (and leave them empty).
+const fruitQueue = new Queue();
+const vegetableQueue = new Queue();
 
 // 7. Dequeue all the elements from the edible queue and enqueue them in the
 //    appropriate queue, either for fruits or vegetables.
+while (!edibleQueue.isEmpty()) {
+const edible = edibleQueue.dequeue();
+if (edible.isFruit) {
+fruitQueue.enqueue(edible);
+} else {
+vegetableQueue.enqueue(edible);
+}
+}
 
 // 8. Print the final contents to the console, showing that your code works.
+console.log("Fruits Queue:");
+while (!fruitQueue.isEmpty()) {
+console.log(fruitQueue.dequeue().toString());
+}
 
+console.log("\nVegetables Queue:");
+while (!vegetableQueue.isEmpty()) {
+console.log(vegetableQueue.dequeue().toString());
+}
 
 
 </script>

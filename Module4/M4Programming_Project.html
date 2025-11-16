@@ -30,40 +30,210 @@ console.log("Project");
 // Class 2: Mary, Tim, Vincent, Rosalee, Caroline
 // Class 3: Caroline, Tim, Vincent, Rosalee, Joe
 
+function Set() {
+    this.items = {};
+}
+
+Set.prototype.has = function(element) {
+    return Object.prototype.hasOwnProperty.call(this.items, element);
+};
+
+Set.prototype.add = function(element) {
+    if (!this.has(element)) {
+        this.items[element] = element;
+        return true;
+    }
+    return false;
+};
+
+Set.prototype.delete = function(element) {
+    if (this.has(element)) {
+        delete this.items[element];
+        return true;
+    }
+    return false;
+};
+
+Set.prototype.clear = function() {
+    this.items = {};
+};
+
+Set.prototype.size = function() {
+    return Object.keys(this.items).length;
+};
+
+Set.prototype.values = function() {
+    return Object.values(this.items);
+};
+
+
 // 2. Create a set of students for each class.
+
+const allStudents = new Set();
+["Mary", "Joe", "Tim", "Rosalee", "Vincent", "Caroline"].forEach(student => allStudents.add(student));
+
+const class1 = new Set();
+["Rosalee", "Joe", "Mary", "Tim"].forEach(student => class1.add(student));
+
+const class2 = new Set();
+["Mary", "Tim", "Vincent", "Rosalee", "Caroline"].forEach(student => class2.add(student));
+
+const class3 = new Set();
+["Caroline", "Tim", "Vincent", "Rosalee", "Joe"].forEach(student => class3.add(student));
+
+console.log("Class 1 Students:", class1.values());
+console.log("Class 2 Students:", class2.values());
+console.log("Class 3 Students:", class3.values());
+
 
 // 3. Use set operations to get a list of students that attended at least
 //    one class.
+Set.prototype.union = function(otherSet) {
+    const unionSet = new Set();
+
+    this.values().forEach(value => unionSet.add(value));
+
+    otherSet.values().forEach(value => unionSet.add(value));
+
+    return unionSet;
+};
+
+const attendedAtLeastOne = class1.union(class2).union(class3);
+
+console.log("Students who attended at least one class:", attendedAtLeastOne.values());
+
 
 // 4. Use set operations to get a list of students that attended all classes.
+Set.prototype.intersection = function(otherSet) {
+    const intersectionSet = new Set();
+
+    this.values().forEach(value => {
+        if (otherSet.has(value)) {
+            intersectionSet.add(value);
+        }
+    });
+
+    return intersectionSet;
+};
+
+const attendedAll = class1.intersection(class2).intersection(class3);
+
+console.log("Students who attended all classes:", attendedAll.values());
+
 
 // 5. Show that the results for (2) and (3) are a subset of all students.
+Set.prototype.subset = function(otherSet) {
+    return this.values().every(value => otherSet.has(value));
+};
+
+console.log("Class 1 is subset of all students:", class1.subset(allStudents));
+console.log("Class 2 is subset of all students:", class2.subset(allStudents));
+console.log("Class 3 is subset of all students:", class3.subset(allStudents));
+console.log("Attended at least one class is subset of all students:", attendedAtLeastOne.subset(allStudents));
+
 
 // 6. Implement the dictionary data structure using the prototype.
 
 function Dictionary() {
-  // ...
+    this.items = {};
 }
+
+Dictionary.prototype.set = function(key, value) {
+    this.items[key] = value;
+};
+
+Dictionary.prototype.get = function(key) {
+    return this.has(key) ? this.items[key] : undefined;
+};
+
+Dictionary.prototype.has = function(key) {
+    return Object.prototype.hasOwnProperty.call(this.items, key);
+};
+
+Dictionary.prototype.delete = function(key) {
+    if (this.has(key)) {
+        delete this.items[key];
+        return true;
+    }
+    return false;
+};
+
+Dictionary.prototype.keys = function() {
+    return Object.keys(this.items);
+};
+
+Dictionary.prototype.values = function() {
+    return Object.values(this.items);
+};
+
+Dictionary.prototype.print = function() {
+    console.log(this.items);
+};
+
+
 
 // 7. Complete the method below that adds all key-value pairs from one
 //    dictionary into another. See also the example below.
 
 Dictionary.prototype.merge = function(dict) {
-  // add all key-value pairs in 'dict' to 'this'
+    dict.keys().forEach(key => {
+        this.items[key] = dict.get(key); 
+    });
 };
 
 // Test your code by uncommenting these lines:
-//var dict1 = new Dictionary();
-//dict1.set("key1", "val1");
-//dict1.set("key2", "val2");
-//dict1.set("key3", "val3");
-//var dict2 = new Dictionary();
-//dict2.set("key3", "val3b");
-//dict2.set("key4", "val4");
-//dict1.merge(dict2);
-//dict1.print(); // should contain key1-val1, key2-val2, key3-val3b, key4-val4
+var dict1 = new Dictionary();
+dict1.set("key1", "val1");
+dict1.set("key2", "val2");
+dict1.set("key3", "val3");
+
+var dict2 = new Dictionary();
+dict2.set("key3", "val3b");
+dict2.set("key4", "val4");
+
+dict1.merge(dict2);
+
+dict1.print();
+
 
 // 8. Implement the hashtable data structure using the prototype.
+function HashTable() {
+    this.items = {};
+}
+
+HashTable.prototype.set = function(key, value) {
+    this.items[key] = value;
+};
+
+HashTable.prototype.get = function(key) {
+    return this.has(key) ? this.items[key] : undefined;
+};
+
+HashTable.prototype.has = function(key) {
+    return Object.prototype.hasOwnProperty.call(this.items, key);
+};
+
+HashTable.prototype.delete = function(key) {
+    if (this.has(key)) {
+        delete this.items[key];
+        return true;
+    }
+    return false;
+};
+
+HashTable.prototype.keys = function() {
+    return Object.keys(this.items);
+};
+
+HashTable.prototype.values = function() {
+    return Object.values(this.items);
+};
+
+HashTable.prototype.print = function() {
+    console.log(this.items);
+};
+const studentTable = new HashTable();
+
 
 
 

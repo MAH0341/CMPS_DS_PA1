@@ -29,90 +29,168 @@ console.log("Project");
 //    object are not supposed to use _ methods (or properties) directly. Run
 //    some tests that show that your code works.
 
+console.log("Project");
+
+// Node constructor
 function Node(key) {
   this.key = key;
   this.left = null;
-  this.right = null
+  this.right = null;
 }
 
+// Binary Search Tree constructor
 function BinarySearchTree() {
-  // the root node
-  this.root = null;
+  this.root = null; // root node
 }
 
-// helper functions
+// Helper function to insert a node
 BinarySearchTree.prototype._insertNode = function(node, newNode) {
-  // node is the node we want to insert into
-  // newNode is the node we want to insert
   if (newNode.key < node.key) {
-    // go to left
     if (node.left === null) {
-      // no left node yet so assign
       node.left = newNode;
-    }
-    else {
-      // move down tree and repeat
+    } else {
       this._insertNode(node.left, newNode);
     }
-  }
-  else {
-    // go to right
+  } else {
     if (node.right === null) {
-      // no right node yet so assign
       node.right = newNode;
-    }
-    else {
-      // move down tree and repeat
+    } else {
       this._insertNode(node.right, newNode);
     }
   }
-}
+};
 
+// Public insert function
 BinarySearchTree.prototype.insert = function(key) {
-  // insert new key in the tree
-  var newNode = new Node(key);
-  if (root === null) {
-    // no nodes yet
-    root = newNode;
-  }
-  else {
-    // find insert location through insertNode
-    this._insertNode(root, newNode);
+  const newNode = new Node(key);
+  if (this.root === null) {
+    this.root = newNode; 
+  } else {
+    this._insertNode(this.root, newNode);
   }
 };
 
-// Uncomment to test you code:
+// In-order traversal (prints tree in sorted order)
+BinarySearchTree.prototype.inOrderTraverse = function(callback) {
+  function _inOrderTraverseNode(node) {
+    if (node !== null) {
+      _inOrderTraverseNode(node.left);
+      callback(node.key);
+      _inOrderTraverseNode(node.right);
+    }
+  }
+  _inOrderTraverseNode(this.root);
+};
 
-//var tree = new BinarySearchTree();
-//tree.insert(11);
-//tree.insert(7);
-//tree.insert(15);
-//// copy rest from book
-//tree.print();
-
-// You need to use this function below.
-
+// Function for printing node value
 function printNode(value) {
   console.log(value);
 }
 
+// --------------------
+// Testing the tree
+// --------------------
+const tree = new BinarySearchTree();
+tree.insert(11);
+tree.insert(7);
+tree.insert(15);
+tree.insert(5);
+tree.insert(3);
+tree.insert(9);
+tree.insert(8);
+
+// Print tree in sorted order
+tree.inOrderTraverse(printNode);
+
+
 // 2. Implement in-order traversal using the prototype. Test your
 //    implementation with the printNode() function given above.
 //    NOTE: in-order means all keys are visited in sorted order.
+BinarySearchTree.prototype.inOrderTraverse = function(callback) {
+  function _inOrderTraverseNode(node) {
+    if (node !== null) {
+      _inOrderTraverseNode(node.left); 
+      callback(node.key);              
+      _inOrderTraverseNode(node.right);
+    }
+  }
+  _inOrderTraverseNode(this.root);
+};
+console.log("In-order traversal:");
+tree.inOrderTraverse(printNode); 
 
 // 3. Implement pre-order traversal using the prototype. Test your
 //    implementation with the printNode() function given above.
 //    NOTE: pre-order means a node is visited prior to its descendants.
+BinarySearchTree.prototype.preOrderTraverse = function(callback) {
+  function _preOrderTraverseNode(node) {
+    if (node !== null) {
+      callback(node.key);               
+      _preOrderTraverseNode(node.left); 
+      _preOrderTraverseNode(node.right);
+    }
+  }
+  _preOrderTraverseNode(this.root);
+};
+console.log("Pre-order traversal:");
+tree.preOrderTraverse(printNode); 
 
 // 4. Implement post-order traversal using the prototype. Test your
 //    implementation with the printNode() function given above.
 //    NOTE: pre-order means a node is visited after its descendants.
+BinarySearchTree.prototype.postOrderTraverse = function(callback) {
+  function _postOrderTraverseNode(node) {
+    if (node !== null) {
+      _postOrderTraverseNode(node.left); 
+      _postOrderTraverseNode(node.right);
+      callback(node.key);                 
+    }
+  }
+  _postOrderTraverseNode(this.root);
+};
+
+function printNode(value) {
+  console.log(value);
+}
+console.log("Post-order traversal:");
+tree.postOrderTraverse(printNode); 
 
 // 5. Implement the min method using the prototype and show that it works.
+BinarySearchTree.prototype.min = function() {
+  let current = this.root;
+  if (current === null) return null; 
+  while (current.left !== null) {
+    current = current.left;
+  }
+  return current.key;
+};
 
+console.log("Minimum key:", tree.min());
 // 6. Implement the max method using the prototype and show that it works.
+BinarySearchTree.prototype.max = function() {
+  let current = this.root;
+  if (current === null) return null; 
+  while (current.right !== null) {
+    current = current.right;
+  }
+  return current.key;
+};
+
+console.log("Maximum key:", tree.max());
 
 // 7. Implement the search method using the prototype and show that it works.
+BinarySearchTree.prototype.search = function(key) {
+  function _searchNode(node, key) {
+    if (node === null) return false;
+    if (key < node.key) return _searchNode(node.left, key);
+    else if (key > node.key) return _searchNode(node.right, key);
+    else return true; 
+  }
+  return _searchNode(this.root, key);
+};
+
+console.log("Search 9:", tree.search(9));   
+console.log("Search 12:", tree.search(12));
 
 // 8. Create the tree that is given in the book if you haven't done so yet.
 //    NOTE: Use the one given right before the Tree Traversal section that
@@ -135,6 +213,57 @@ function printNode(value) {
 // 13 Implement Prim's algorithm (use code from the book).
 //    NOTE1: You do not need to use the code from (12) for this question.
 //    NOTE2: Replace INF (used in the book) with Infinity.
+console.log("Prim's Algorithm");
+
+const minKey = (key, visited) => {
+  let min = Infinity;
+  let minIndex = -1;
+
+  for (let v = 0; v < key.length; v++) {
+    if (!visited[v] && key[v] < min) {
+      min = key[v];
+      minIndex = v;
+    }
+  }
+  return minIndex;
+};
+
+const prim = (graph) => {
+  const length = graph.length;
+  const parent = Array(length).fill(null); 
+  const key = Array(length).fill(Infinity); 
+  const visited = Array(length).fill(false);
+
+  key[0] = 0;      
+  parent[0] = -1; 
+
+  for (let i = 0; i < length - 1; i++) {
+    const u = minKey(key, visited); 
+    visited[u] = true;
+
+    for (let v = 0; v < length; v++) {
+      if (graph[u][v] !== 0 && !visited[v] && graph[u][v] < key[v]) {
+        parent[v] = u;
+        key[v] = graph[u][v];
+      }
+    }
+  }
+
+  return parent; 
+};
+
+const graph = [
+  [0, 2, 4, 0, 0, 0],
+  [2, 0, 2, 4, 2, 0],
+  [4, 2, 0, 0, 3, 0],
+  [0, 4, 0, 0, 0, 2],
+  [0, 2, 3, 0, 0, 2],
+  [0, 0, 0, 2, 2, 0]
+];
+
+const mst = prim(graph);
+console.log("Parent array of MST:", mst);
+
 
 // 14 Show that your code works using the example from the book in the minimum
 //    spanning tree section. Print both the edges and the weights that are part

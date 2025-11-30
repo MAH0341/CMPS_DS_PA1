@@ -23,21 +23,128 @@
 console.log("Project");
 
 // 1. Implement the ArrayList using the prototype.
+function ArrayList() {
+    this.array = [];
+}
+
+ArrayList.prototype.insert = function(item) {
+    this.array.push(item);
+};
+
+ArrayList.prototype.toString = function() {
+    return this.array.join();
+};
+
+ArrayList.prototype.sequentialsearch = function(item) {
+    for (var i = 0; i < this.array.length; i++) {
+        if (item === this.array[i]) {
+            return i;
+        }
+    }
+    return -1;
+    ArrayList.prototype.binarysearch = function(item) {
+    var low = 0;
+    var high = this.array.length - 1;
+
+    while (low <= high) {
+        var mid = Math.floor((low + high) / 2);
+        if (this.array[mid] === item) {
+            return mid; 
+        } else if (this.array[mid] < item) {
+            low = mid + 1;
+        } else {
+            high = mid - 1;
+        }
+    }
+
+    return -1; 
+};
+};
+
+ArrayList.prototype.quicksort = function() {
+
+function swap(arr, a, b) {
+    var temp = arr[a];
+    arr[a] = arr[b];
+    arr[b] = temp;
+}
+
+function partition(arr, left, right) {
+    var pivot = arr[Math.floor((left + right) / 2)],
+        i = left,
+        j = right;
+    while (i <= j) {
+        while (arr[i] < pivot) i++;
+        while (arr[j] > pivot) j--;
+        if (i <= j) {
+            swap(arr, i, j);
+            i++;
+            j--;
+        }
+    }
+    return i;
+}
+
+function quick(arr, left, right) {
+    var index;
+    if (arr.length > 1) {
+        index = partition(arr, left, right);
+        if (left < index - 1) quick(arr, left, index - 1);
+        if (index < right) quick(arr, index, right);
+    }
+}
+
+quick(this.array, 0, this.array.length - 1);
+};
+
+var list1 = new ArrayList();
+list1.insert(5);
+list1.insert(3);
+list1.insert(1);
+console.log("ArrayList content: " + list1.toString()); 
+console.log("Search 3: " + list1.sequentialsearch(3)); 
+console.log("Search 10: " + list1.sequentialsearch(10)); 
+
 
 // 2. Complete the createNonSortedRandomArray(size) below by returning an
 //    ArrayList with the numbers 1, 2, ..., size in random order.
 //    NOTE: there are multiple ways to achieve this.
-
 function createNonSortedRandomArray(size) {
-  // ...
+    var list = new ArrayList();
+
+    var temp = [];
+    for (var i = 1; i <= size; i++) {
+        temp.push(i);
+    }
+
+    while (temp.length > 0) {
+        var index = Math.floor(Math.random() * temp.length);
+        var value = temp[index];
+        list.insert(value);
+        temp.splice(index, 1);
+    }
+
+    return list;
 }
+
+var randomList = createNonSortedRandomArray(10);
+console.log("Random ArrayList: " + randomList.toString());
 
 // 3. Implement the Quick Sort algorithm and test your code with the function
 //    you wrote for (2).
+console.log("Before Quick Sort: " + randomList.toString());
+randomList.quicksort();
+console.log("After Quick Sort: " + randomList.toString());
 
 // 4. Implement searching using the prototype.
+var list2 = createNonSortedRandomArray(10);    
+console.log("Random ArrayList: " + list2.toString());
+
+console.log("Search 5: " + list2.sequentialsearch(5));  
+console.log("Search 20: " + list2.sequentialsearch(20)); 
 
 // 5. Implement the binary search algorithm and test your code.
+
 
 // The following set of steps come from an earlier homework.
 // The following text is from the all the Amendments in the Bill of Rights.
@@ -49,14 +156,37 @@ text = text.replace(/[.,;]/g, "");
 // And store the words into an array.
 var textArray = text.split(" ");
 
+var amendmentsList = new ArrayList();
+for (var i = 0; i < textArray.length; i++) {
+    amendmentsList.insert(textArray[i]);
+}
+
 // 6. Use sorting and searching to find out whether the word 'president'
 //    appears in the amendments. You should use the code you wrote above.
+var indexPresident = amendmentsList.sequentialsearch("president");
+if (indexPresident !== -1) {
+    console.log("Step 6: The word 'president' appears in the amendments.");
+} else {
+    console.log("Step 6: The word 'president' does NOT appear in the amendments.");
+}
 
 // 7. Use sorting and searching to find out whether the word 'state' appears
 //    in the amendments. You should use the code you wrote above.
+var indexState = amendmentsList.sequentialsearch("state");
+if (indexState !== -1) {
+    console.log("Step 7: The word 'state' appears in the amendments.");
+} else {
+    console.log("Step 7: The word 'state' does NOT appear in the amendments.");
+}
 
 // 8. Use sorting and searching to find out whether the word 'country' appears
 //    in the amendments. You should use the code you wrote above.
+var indexCountry = amendmentsList.sequentialsearch("country");
+if (indexCountry !== -1) {
+    console.log("Step 8: The word 'country' appears in the amendments.");
+} else {
+    console.log("Step 8: The word 'country' does NOT appear in the amendments.");
+}
 
 
 

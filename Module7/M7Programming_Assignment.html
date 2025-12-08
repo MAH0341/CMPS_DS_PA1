@@ -23,7 +23,16 @@
 console.log("Recursion");
 
 // 1. Implement fibonnacci using a recursive function and test your code.
+function fibonacci(n) {
+  if (n < 1) return 0;       
+  if (n <= 2) return 1;     
+  return fibonacci(n - 1) + fibonacci(n - 2); 
+}
 
+console.log(fibonacci(5));  
+console.log(fibonacci(10)); 
+console.log(fibonacci(1));  
+console.log(fibonacci(0));  
 
 
 //---------------------//
@@ -33,8 +42,45 @@ console.log("Dynamic programming");
 
 // 1. Implement the minimum coin change problem using dynamic programming.
 //    Test your code.
+function minCoinChange(coins, amount) {
+  const cache = []; 
 
+  const makeChange = (value) => {
+    if (value < 0) {
+      return []; 
+    }
 
+    if (cache[value]) {
+      return cache[value]; 
+    }
+
+    let min = [];
+
+    for (let i = 0; i < coins.length; i++) {
+      const coin = coins[i];
+      const newAmount = value - coin;
+
+      if (newAmount >= 0) {
+        const newMin = makeChange(newAmount);
+
+        if (
+          newAmount >= 0 &&
+          ((newMin.length < min.length - 1) || !min.length) &&
+          (newMin.length || !newAmount)
+        ) {
+          min = [coin].concat(newMin);
+        }
+      }
+    }
+
+    cache[value] = min;
+    return cache[value];
+  };
+
+  return makeChange(amount);
+}
+
+console.log(minCoinChange([1, 5, 10, 25], 36));
 
 //-------------------//
 // Greedy algorithms //
@@ -43,7 +89,24 @@ console.log("Greedy algorithms");
 
 // 1. Implement the minimum coin change problem using a greedy algorithm.
 //    Test your code.
+function minCoinChange(coins, amount) {
+    const change = [];
+    let total = 0;
 
+    for (let i = coins.length - 1; i >= 0; i--) {  
+        const coin = coins[i];
+
+        
+        while (total + coin <= amount) {           
+            change.push(coin);                      
+            total += coin;                          
+        }
+    }
+
+    return change;
+}
+
+console.log(minCoinChange([1, 5, 10, 25], 36));
 
 
 //----------------------------------------//
@@ -53,11 +116,27 @@ console.log("Introduction to functional programming");
 
 // 1. Solve the problem of obtaining all the positive numbers in an array using
 //    imperative style.
+// Example array
+const numbers = [3, -1, 0, 7, -5, 2];
+const positiveNumbersImperative = function(array) {
+    const result = [];
+    for (let i = 0; i < array.length; i++) {
+        if (array[i] > 0) {
+            result.push(array[i]);
+        }
+    }
+    return result;
+};
+console.log("Imperative:", positiveNumbersImperative(numbers));
 
 // 2. Solve the problem of obtaining all the positive numbers in an array using
 //    functional style.
-
-
+const filterPositive = function(array) {
+    return array.filter(function(item) {
+        return item > 0;
+    });
+};
+console.log("Functional:", filterPositive(numbers));
 
 </script>
 </head>

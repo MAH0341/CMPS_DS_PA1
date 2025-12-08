@@ -23,18 +23,62 @@
 console.log("Project");
 
 // 1. Implement factorial using a recursive function and test your code.
+// Example array for sum
+const numbers = [1, 2, 3, 4, 5];
+const factorial = function(n) {
+    if (n <= 1) return 1; 
+    return n * factorial(n - 1); 
+};
+console.log("Factorial of 5:", factorial(5));
 
 // 2. Implement a function that returns the complete fibonacci sequence in an
 //    array for a given number.
+const fibonacci = function(n) {
+    const sequence = [0, 1]; 
+    for (let i = 2; i < n; i++) {
+        sequence.push(sequence[i - 1] + sequence[i - 2]);
+    }
+    return sequence;
+};
+console.log("Fibonacci sequence for 10 numbers:", fibonacci(10));
 
 // 3. Implement finding the longest common subsequence using dynamic
 //    programming. Test your code.
+const longestCommonSubsequence = function(str1, str2) {
+    const dp = [];
+    for (let i = 0; i <= str1.length; i++) {
+        dp[i] = [];
+        for (let j = 0; j <= str2.length; j++) {
+            if (i === 0 || j === 0) dp[i][j] = 0;
+            else if (str1[i - 1] === str2[j - 1]) dp[i][j] = dp[i - 1][j - 1] + 1;
+            else dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+        }
+    }
+    return dp[str1.length][str2.length];
+};
+console.log("LCS of 'abcde' and 'ace':", longestCommonSubsequence("abcde", "ace"));
 
 // 4. Solve the problem of summing all the numbers in an array using
 //    imperative style.
+const sumImperative = function(array) {
+    let sum = 0;
+    for (let i = 0; i < array.length; i++) {
+        sum += array[i];
+    }
+    return sum;
+};
+console.log("Imperative sum:", sumImperative(numbers));
 
 // 5. Solve the problem of summing all the numbers in an array using
 //    functional style.
+const sumFunctional = function(array) {
+    let sum = 0;
+    array.forEach(function(item) { 
+        sum += item;
+    });
+    return sum;
+};
+console.log("Functional sum:", sumFunctional(numbers));
 
 // 6. Solve problem 14 of Project Euler: https://projecteuler.net/problem=14
 //    Note: This may be a bit challenging. Try to get as far as you can.

@@ -34,12 +34,62 @@ function isPalindrome(str) {
   return true;
 }
 
+// Worst-Case Complexity: O(n)
+// The loop runs through half the string ⇒ n/2 comparisons.
+// Big-O ignores constants ⇒ O(n).
+// Worst case occurs when the string is a palindrome, so the loop checks every pair.
+
+// Best-Case Complexity: O(1)
+// If the first comparison fails (str[0] !== str[last]), the function returns immediately.
+// Only one iteration is executed.
+
+// Average-Case Complexity: O(n)
+// On average, mismatches happen somewhere in the middle, not immediately.
+// So the loop iterates through ~n/4 comparisons.
+// Constants dropped ⇒ O(n).
+
 // 2. Write a program that finds the minimum element in a stack in O(1) time
 //    complexity. Note that earlier solutions searched through the elements on
 //    the stack but that leads to an O(n) solution.
 //    NOTE: this question is sometimes asked on interviews.
 
+class MinStack {
+  constructor() {
+    this.mainStack = [];
+    this.minStack = [];
+  }
 
+  push(value) {
+    this.mainStack.push(value);
+
+    if (this.minStack.length === 0 || value <= this.minStack[this.minStack.length - 1]) {
+      this.minStack.push(value);
+    } else {
+      this.minStack.push(this.minStack[this.minStack.length - 1]);
+    }
+  }
+
+  pop() {
+    this.minStack.pop();
+    return this.mainStack.pop();
+  }
+
+  getMin() {
+    return this.minStack[this.minStack.length - 1];
+  }
+}
+
+const s = new MinStack();
+s.push(5);
+s.push(3);
+s.push(7);
+console.log("Current Min:", s.getMin());  
+
+s.pop();
+console.log("Current Min:", s.getMin());  
+
+s.push(2);
+console.log("Current Min:", s.getMin());  
 
 //----------------------------//
 // Having fun with algorithms //
@@ -47,10 +97,38 @@ function isPalindrome(str) {
 console.log("Having fun with algorithms");
 
 // 1. Solve Project Euler problem 1 (https://projecteuler.net/problem=1).
+function sumMultiples() {
+  let sum = 0;
+  for (let i = 0; i < 100; i++) {
+    if (i % 3 === 0 || i % 5 === 0) {
+      sum += i;
+    }
+  }
+  console.log(sum);
+}
+
+sumMultiples();
 
 // 2. Solve Project Euler problem 2 (https://projecteuler.net/problem=2).
+function sumEvenFibonacci() {
+  let sum = 0;
+  let prev = 1;
+  let curr = 2;
 
+  while (curr <= 4000000) {
+    if (curr % 2 === 0) {
+      sum += curr;
+    }
 
+    const next = prev + curr;
+    prev = curr;
+    curr = next;
+  }
+
+  console.log(sum);
+}
+
+sumEvenFibonacci();
 
 </script>
 </head>

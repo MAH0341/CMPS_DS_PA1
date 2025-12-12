@@ -35,11 +35,37 @@ function hasDuplicates(arr) {
   return false;
 }
 
+// 1. Worst-case complexity of hasDuplicates
+// There are two full loops, each going from 0 to arr.length.
+// Inside the inner loop you only do constant-time operations (i !== j and comparison).
+// This matches the same structure as bubble sort in our book (two nested loops), which is an O(n²) algorithm.
+ 
+console.log("1. Worst-case complexity of hasDuplicates is: O(n^2)");
+
 // 2. Implement a faster version of the same function and analyze the
 //    complexity of this approach.
 
 function hasDuplicatesFast(arr) {
-  // todo
+
+// Bubble sort 
+for (let i = 0; i < arr.length; i++) {
+  for (let j = 0; j < arr.length - 1; j++) {
+    if (arr[j] > arr[j + 1]) {
+      let temp = arr[j];
+      arr[j] = arr[j + 1];
+      arr[j + 1] = temp;
+    }
+  }
+}
+for (let i = 0; i < arr.length - 1; i++) {
+  if (arr[i] === arr[i + 1]) {
+    console.log(`Duplicate found: ${arr[i]}`);
+    return true;
+  }
+}
+
+console.log("No duplicates found.");
+return false;
 }
 
 // 3. The travelling salesman problem is a another classic problem and we are
